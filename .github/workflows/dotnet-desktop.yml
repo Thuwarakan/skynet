@@ -1,0 +1,22 @@
+name: .NET Desktop App
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Desktop SDK
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '6.0.100-preview.7.21379.14'
+    - name: Build and publish
+      run: |
+        dotnet publish -c Release -r win-x64 --self-contained false /p:PublishSingleFile=true /p:PublishTrimmed=true
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: my-app
+        path: bin/Release/net6.0-windows/win-x64/publish
